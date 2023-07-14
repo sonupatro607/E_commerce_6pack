@@ -1,0 +1,37 @@
+//Error handling :-
+utils > errorhander.js ---> middleware > error.js ----> use middileware in app.js to accept the requests of error 
+
+//Async handled :- middleware > catchAsyncError.sj ---> controller > prodcontroller.js
+module.exports = (myfun) => (req, res, next) => {
+  Promise.resolve(myfun(req, res, next).catch(next));
+};
+
+
+// unhandled promise rejection:- (jab promise ke error ko halndle mnakiya jaye toh yeh error event hote ha)
+process.on("unhandledRejection", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log(`shutting down the server due to unhandled promise Rejection`);
+
+  server.close(() => {
+    process.exit();
+  });
+});
+
+/note:-
+//process.on("eventname", callback function) ==>it is equlvalent to the" addEventlistener"
+
+
+// "uncaught exception error" handling (must be always top on the codes otherwise ut won't get catch the error)
+process.on("uncaughtException", (err) => {
+  console.log(`Error:${err.message}`);
+  console.log(`shutting down the server due to uncaught exception error`);
+});
+
+//note:
+uncaughtException kya hota ha jab humare dyan se nikal jaye or kuch silly mistake ho jaye 
+example:
+console.log(mylove)
+error: mylove is not define 
+
+isliye uncaughtException error handling ka sab se top 
+mai likhana chaiye tabhi wo silly msistak ko catch kr payega
